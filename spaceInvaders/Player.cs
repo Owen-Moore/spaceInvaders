@@ -41,6 +41,25 @@ namespace spaceInvaders
                     x = ss.Width - width;
                 }
             }
+            if (direction == "up" == true)
+            {
+                y -= speed;
+
+                if (y < 0)
+                {
+                    y = 0;
+                }
+            }
+
+            if (direction == "down")
+            {
+                y += speed;
+
+                if (y > ss.Height - height)
+                {
+                    y = ss.Height - height;
+                }
+            }
         }
 
      }
