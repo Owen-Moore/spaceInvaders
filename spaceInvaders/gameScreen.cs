@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace spaceInvaders
 {
     public partial class gameScreen : UserControl
@@ -23,6 +24,7 @@ namespace spaceInvaders
        
         Size screenSize;
         Random randGen = new Random();
+       
         List<Invaders> invaders = new List<Invaders>();
         List<bullet>  bullets = new List<bullet>();
 
@@ -50,28 +52,30 @@ namespace spaceInvaders
 
         public void Invader()
         {
-         
           if (invaders.Count() < 1)
             {
                Invaders i = new Invaders(x, y, xspeed, yspeed);
                invaders.Add(i);
             }
-            
-            
         }
         
         public void Bullet()
         {
-            int bx = x; 
-            int by = y;
-            int bxspeed = 0;
+            int bx = 100; 
+            int by = 100;
+            int bxspeed = 10;
             int byspeed = 10;
 
-            if (invadershot == 10)
+            if (invadershot == 0)
             {
+
                 bullet b = new bullet(bx, by, bxspeed, byspeed);
                 bullets.Add(b);
+              
+                invadershot++;
+
             }
+            Refresh();
         }
 
         private void gameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -117,7 +121,7 @@ namespace spaceInvaders
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             invadershot --;
-
+            Bullet();
             if (leftArrowDown == true)
             {
                 player.Move("left", screenSize);
@@ -152,13 +156,17 @@ namespace spaceInvaders
         {
             e.Graphics.FillRectangle(Brushes.White, player.x, player.y, player.width, player.height);
 
+
             foreach (Invaders i in invaders)
             {
-                    e.Graphics.FillRectangle(Brushes.Red, i.x, i.y, i.width, i.height);
+                e.Graphics.FillRectangle(Brushes.Red, i.x, i.y, i.width, i.height);
             }
             foreach (bullet b in bullets)
             {
-                e.Graphics.FillRectangle(Brushes.Red, b.x, b.y, b.size, b.size);
+                //I got bored of playing around with making the bullet so I made the changing colour stuff
+                Color randomColor = Color.FromArgb(randGen.Next(256), randGen.Next(256), randGen.Next(256));
+                SolidBrush drawBrush = new SolidBrush(randomColor);
+                e.Graphics.FillRectangle(drawBrush, b.x, b.y, b.size, b.size);
             }
         }
     }
