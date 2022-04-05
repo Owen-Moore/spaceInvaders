@@ -18,7 +18,7 @@ namespace spaceInvaders
         int xspeed = 2;
         int yspeed = 0;
 
-        int invadershot = 20;
+        int invadershot = 0;
        
         Player player;
        
@@ -61,6 +61,7 @@ namespace spaceInvaders
         
         public void Bullet()
         {
+            
             int bx = 100; 
             int by = 100;
             int bxspeed = 10;
@@ -75,7 +76,11 @@ namespace spaceInvaders
                 invadershot++;
 
             }
-            Refresh();
+            else if (invadershot <= 1)
+            {
+                bullets.RemoveAt(0);
+            }
+            
         }
 
         private void gameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -120,8 +125,9 @@ namespace spaceInvaders
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            invadershot --;
+            invadershot ++;
             Bullet();
+            
             if (leftArrowDown == true)
             {
                 player.Move("left", screenSize);
@@ -148,6 +154,11 @@ namespace spaceInvaders
             foreach (bullet b in bullets)
             {
                 b.Move(screenSize);
+                if (b.Collision(player))
+                {
+                    gameTimer.Enabled = false;
+                    Form1.ChangeScreen(this, new GameOver());
+                }
                
             }
             Refresh();
@@ -164,10 +175,11 @@ namespace spaceInvaders
             foreach (bullet b in bullets)
             {
                 //I got bored of playing around with making the bullet so I made the changing colour stuff
-                Color randomColor = Color.FromArgb(randGen.Next(256), randGen.Next(256), randGen.Next(256));
-                SolidBrush drawBrush = new SolidBrush(randomColor);
+                //Color randomColor = Color.FromArgb(randGen.Next(256), randGen.Next(256), randGen.Next(256));
+                SolidBrush drawBrush = new SolidBrush(Color.Red);
                 e.Graphics.FillRectangle(drawBrush, b.x, b.y, b.size, b.size);
             }
+            
         }
     }
 }

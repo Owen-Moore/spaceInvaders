@@ -52,7 +52,8 @@ namespace spaceInvaders
 
             if (bulletRec.IntersectsWith(playerRec))
             {
-                    Form1.ChangeScreen(this, new GameOver());
+                return true;
+                   
             }
 
             return false;
